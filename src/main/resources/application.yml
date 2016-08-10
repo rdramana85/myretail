@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: myretail-service
+  banner:
+    location: classpath:banner.txt
+    charset: UTF-8
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  cloud:
+    config:
+      enabled: false      
+product:
+    domain:
+       attribute:
+           service:
+              url:
+               prefix: https://api.target.com/products/v3/
+               suffix: ?fields=descriptions&id_type=TCIN&key=43cJWpLjH8Z8oR18KdrZDBKAgLLQKJjz
+logging:
+  level:
+    com.target.myretail:INFO
+    
+cassandra:
+  ip: 127.0.0.1
+  port: 9142	
+  config: initCassandra.cql		
