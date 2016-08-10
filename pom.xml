@@ -41,7 +41,7 @@
 	</dependency>
 	<dependency>
 		    <groupId>org.cassandraunit</groupId>
-		    <artifactId>cassandra-unit</artifactId>
+		    <artifactId>cassandra-unit-shaded</artifactId>
 		    <version>2.1.9.2</version>
 	</dependency>
 	<dependency>
