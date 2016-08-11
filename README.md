@@ -14,7 +14,7 @@ Sample GET Response - {"productId":13860428,"name":"BIG LEBOWSKI, THE Blu-ray","
 
 Sample PUT URL - http://localhost:8080/myretail/v1/products/13860428
 
-Sample PUT Request Bode - {"price":46.0,"currencyCode":"USD"}
+Sample PUT Request Body - {"price":46.0,"currencyCode":"USD"}
 
 If Handshake exception occurs, import target api's certificate to java cacerts. Steps are available in this thread - http://stackoverflow.com/questions/9619030/resolving-javax-net-ssl-sslhandshakeexception-sun-security-validator-validatore
 
