@@ -1,5 +1,7 @@
 package com.target.myretail.controller;
 
+import java.util.concurrent.ExecutionException;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -37,12 +39,12 @@ public class ProductController {
 	private Transformer transformer;
 	
 	@RequestMapping(value="v1/products/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> getProductNameAndPriceData(@PathVariable("id") @NotNull Long productId) throws Exception{
+	public ResponseEntity<String> getProductNameAndPriceData(@PathVariable("id") @NotNull Long productId) throws InterruptedException, ExecutionException {
 		return transformer.transform(productDataAggregationService.getProductPriceData(productId));
 	}
 	
 	@RequestMapping(value="v1/products/{id}",method=RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> updatePriceData(@PathVariable("id") Long productId,@RequestBody @Valid ProductPriceData priceData) throws Exception{
+	public ResponseEntity<String> updatePriceData(@PathVariable("id") Long productId,@RequestBody @Valid ProductPriceData priceData) throws InterruptedException, ExecutionException {
 		return productPriceUpdateService.updatePrice(productId,priceData);
 	}
 	

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 
 
+
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
@@ -34,7 +35,7 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 	DAO<Entity> dao;
 	
 	@Override
-	public ProductPriceData getCurentPrice(Long productId) {
+	public ProductPriceData getCurentPrice(Long productId) throws InterruptedException, ExecutionException {
 		Entity priceEntity = new Entity();
 		priceEntity.setTableName(MyRetailConstants.PRICE_TABLE);
 		String[] pKey = {MyRetailConstants.PRROD_ID_COLUMN};
@@ -45,12 +46,8 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 		priceEntity.setPrimaryKeyValues(pKeyVal);
 		priceEntity.setKeySpaceName(MyRetailConstants.PRICE_KEYSPACE);
 		ResultSetFuture rF = dao.get(priceEntity);
-		ResultSet rs;
-		try {
-			rs = rF.get();
-		} catch (InterruptedException | ExecutionException e) {
-			throw new ServiceException(e);
-		}
+		ResultSet rs;		
+		rs = rF.get();		
 		Iterator<Row> iter = rs.iterator();
 		Float price = null;
 		String currencyCode = null;
@@ -65,7 +62,7 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 			priceData.setPrice(price);
 			priceData.setCurrencyCode(currencyCode);
 		}else{
-			throw new ProductDataNotFoundException("Product price not found");
+			throw new ProductDataNotFoundException("Product price/currency code not found");
 		}
 		return priceData;
 	}

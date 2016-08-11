@@ -13,6 +13,7 @@ import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.target.myretail.dao.DAO;
 import com.target.myretail.dao.Entity;
+import com.target.myretail.exceptions.ServiceException;
 import com.target.myretail.model.ProductPriceData;
 import com.target.myretail.service.ProductPriceUpdateService;
 import com.target.myretail.util.MyRetailConstants;
@@ -37,7 +38,8 @@ public class ProductPriceUpdateServiceImpl implements ProductPriceUpdateService 
 		priceEntity.setPrimaryKeyValues(pKeyVal);
 		priceEntity.setKeySpaceName(MyRetailConstants.PRICE_KEYSPACE);
 		ResultSetFuture rF = dao.updateAsync(priceEntity);
-		ResultSet rs = rF.get();
+		ResultSet rs;		
+		rs = rF.get();		
 		Iterator<Row> iter = rs.iterator();
 		boolean isUpdated = false;
 		while(iter.hasNext()){

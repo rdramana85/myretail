@@ -29,24 +29,17 @@ public class ProductDataAggregationServiceImpl implements
 	private ProductPriceService productPriceService;
 
 	@Override
-	public ProductData getProductPriceData(Long productId) throws ExecutionException
-			 {
+	public ProductData getProductPriceData(Long productId) throws InterruptedException, ExecutionException {
 		ProductData productData = new ProductData();
-		try {
-			ListenableFuture<ResponseEntity<ProductAttributeData>> future = productAttributeService
-					.getProductAttributeData(productId);
-			ResponseEntity<ProductAttributeData> productAttributeData = null;
-			ProductPriceData priceData = productPriceService
-					.getCurentPrice(productId);
-			productData.setProductPriceData(priceData);
-			productAttributeData = future.get();
-			productData.setProductId(productId);
-			productData.setProductAttributeData(productAttributeData.getBody());
-		} catch (InterruptedException e) {
-			throw new ServiceException(e);
-		} catch (ExecutionException e) {
-			throw e;
-		}
+		ListenableFuture<ResponseEntity<ProductAttributeData>> future = productAttributeService
+				.getProductAttributeData(productId);
+		ResponseEntity<ProductAttributeData> productAttributeData = null;
+		ProductPriceData priceData = productPriceService
+				.getCurentPrice(productId);
+		productData.setProductPriceData(priceData);
+		productAttributeData = future.get();
+		productData.setProductId(productId);
+		productData.setProductAttributeData(productAttributeData.getBody());
 		return productData;
 	}
 

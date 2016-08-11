@@ -31,7 +31,6 @@ public class ProductAttributeServiceImpl implements ProductAttributeService {
 			Long productId) {
 		HttpMethod method = HttpMethod.GET;
 		Class<ProductAttributeData> responseType = ProductAttributeData.class;
-		// create request entity using HttpHeaders
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.TEXT_PLAIN);
 		HttpEntity<String> requestEntity = new HttpEntity<String>("params",

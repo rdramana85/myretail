@@ -6,6 +6,6 @@ import com.target.myretail.model.ProductData;
 
 public interface ProductDataAggregationService {
 	
-	public ProductData getProductPriceData(Long productId) throws ExecutionException;
+	public ProductData getProductPriceData(Long productId) throws InterruptedException, ExecutionException;
 	
 }
