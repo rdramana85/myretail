@@ -17,24 +17,28 @@ import com.target.myretail.service.ProductDataAggregationService;
 import com.target.myretail.service.ProductPriceService;
 
 @Component
-public class ProductDataAggregationServiceImpl implements ProductDataAggregationService {
+public class ProductDataAggregationServiceImpl implements
+		ProductDataAggregationService {
 
 	@Autowired
 	@Qualifier("productAttributeService")
 	private ProductAttributeService productAttributeService;
-	
+
 	@Autowired
 	@Qualifier("productPriceService")
 	private ProductPriceService productPriceService;
-	
+
 	@Override
-	public ProductData getProductPriceData(Long productId) throws Exception {
+	public ProductData getProductPriceData(Long productId) throws ExecutionException
+			 {
 		ProductData productData = new ProductData();
-		ListenableFuture<ResponseEntity<ProductAttributeData>> future = productAttributeService.getProductAttributeData(productId);
-		ResponseEntity<ProductAttributeData> productAttributeData = null;
-		ProductPriceData priceData = productPriceService.getCurentPrice(productId);
-		productData.setProductPriceData(priceData);
 		try {
+			ListenableFuture<ResponseEntity<ProductAttributeData>> future = productAttributeService
+					.getProductAttributeData(productId);
+			ResponseEntity<ProductAttributeData> productAttributeData = null;
+			ProductPriceData priceData = productPriceService
+					.getCurentPrice(productId);
+			productData.setProductPriceData(priceData);
 			productAttributeData = future.get();
 			productData.setProductId(productId);
 			productData.setProductAttributeData(productAttributeData.getBody());
@@ -42,7 +46,7 @@ public class ProductDataAggregationServiceImpl implements ProductDataAggregation
 			throw new ServiceException(e);
 		} catch (ExecutionException e) {
 			throw e;
-		}		
+		}
 		return productData;
 	}
 

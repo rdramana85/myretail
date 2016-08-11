@@ -13,11 +13,16 @@ import org.springframework.stereotype.Service;
 
 
 
+
+
+
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.target.myretail.dao.DAO;
 import com.target.myretail.dao.Entity;
+import com.target.myretail.exceptions.ProductDataNotFoundException;
+import com.target.myretail.exceptions.ServiceException;
 import com.target.myretail.model.ProductPriceData;
 import com.target.myretail.service.ProductPriceService;
 import com.target.myretail.util.MyRetailConstants;
@@ -29,7 +34,7 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 	DAO<Entity> dao;
 	
 	@Override
-	public ProductPriceData getCurentPrice(Long productId) throws InterruptedException, ExecutionException {
+	public ProductPriceData getCurentPrice(Long productId) {
 		Entity priceEntity = new Entity();
 		priceEntity.setTableName(MyRetailConstants.PRICE_TABLE);
 		String[] pKey = {MyRetailConstants.PRROD_ID_COLUMN};
@@ -40,7 +45,12 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 		priceEntity.setPrimaryKeyValues(pKeyVal);
 		priceEntity.setKeySpaceName(MyRetailConstants.PRICE_KEYSPACE);
 		ResultSetFuture rF = dao.get(priceEntity);
-		ResultSet rs = rF.get();
+		ResultSet rs;
+		try {
+			rs = rF.get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new ServiceException(e);
+		}
 		Iterator<Row> iter = rs.iterator();
 		Float price = null;
 		String currencyCode = null;
@@ -50,9 +60,13 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 			currencyCode = r.getString(1);
 		}
 		ProductPriceData priceData = new ProductPriceData();
-		priceData.setProductId(productId);
-		priceData.setPrice(price);
-		priceData.setCurrencyCode(currencyCode);
+		if(price!=null && currencyCode!=null){
+			priceData.setProductId(productId);
+			priceData.setPrice(price);
+			priceData.setCurrencyCode(currencyCode);
+		}else{
+			throw new ProductDataNotFoundException("Product price not found");
+		}
 		return priceData;
 	}
 

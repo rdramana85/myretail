@@ -15,3 +15,5 @@ create table productprice (
 insert into productprice(productid,price,currency_code) values(13860428,21,'USD');
 
 insert into productprice(productid,price,currency_code) values(13860429,44,'USD');
+
+insert into productprice(productid,price,currency_code) values(1386,44,'USD');

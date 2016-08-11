@@ -16,18 +16,27 @@ public class ApplicationExceptionHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationExceptionHandler.class);
 	
-	@ExceptionHandler(ServiceException.class)
+	@ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleDefaultException(Exception ex, WebRequest webRequest) {        
         LOGGER.error("Exception processing request", ex);        
         String errMsg = "{ \"message\": \"Internal server error has occurred\"}";
         return new ResponseEntity<String>(errMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-    }	
+    }
 	
+	@ExceptionHandler(ProductDataNotFoundException.class)
+    public ResponseEntity<String> handleProductDataNotFoundException(Exception ex, WebRequest webRequest) {        
+        LOGGER.error("Exception processing request", ex);
+        String errMsg = ex.getMessage();
+        return new ResponseEntity<String>(errMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 	
 	@ExceptionHandler(ExecutionException.class)
     public ResponseEntity<String> handleExecutionException(Exception ex, WebRequest webRequest) {        
-        LOGGER.error("Exception processing request", ex);        
-        String errMsg = (ex.getCause() instanceof ProductDataNotFoundException)?"Product  data not found":"Internal server error has occured"; 
+        LOGGER.error("Exception processing request", ex);
+        String errMsg = "{ \"message\": \"Internal server error has occurred\"}";
+        if(ex.getCause() instanceof ProductDataNotFoundException){
+        	errMsg = ex.getCause().getMessage();
+        }
         return new ResponseEntity<String>(errMsg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 	
