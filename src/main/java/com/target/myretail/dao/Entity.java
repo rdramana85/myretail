@@ -8,7 +8,7 @@ public class Entity {
 	
 	private String[] columns;
 	
-	private String[] selectColumns;
+	
 	
 	private Object[] columnValues;
 	
@@ -54,14 +54,6 @@ public class Entity {
 
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
-	}
-
-	public String[] getSelectColumns() {
-		return selectColumns;
-	}
-
-	public void setSelectColumns(String[] selectColumns) {
-		this.selectColumns = selectColumns;
 	}
 
 	public String getKeySpaceName() {

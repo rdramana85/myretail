@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.target.myretail.exceptions.ProductDataNotFoundException;
+import com.target.myretail.exceptions.ServiceException;
 import com.target.myretail.model.ProductAttributeData;
 
 public class ProductAttributeDeserializer extends StdDeserializer<ProductAttributeData> {
@@ -29,7 +31,12 @@ public class ProductAttributeDeserializer extends StdDeserializer<ProductAttribu
 		JsonNode productCompositeResponseNode = rootNode.get("product_composite_response");		
 		ArrayNode itemArray = (ArrayNode) productCompositeResponseNode.get("items");
 		JsonNode itemNode = itemArray.get(0);
-		productAttributeData.setProductName(itemNode.get("general_description").asText());
+		JsonNode nameNode = itemNode.get("general_description");
+		if(nameNode!=null){
+			productAttributeData.setProductName(nameNode.asText());
+		}else{
+			throw new ProductDataNotFoundException("Product Name not found");
+		}
 		return productAttributeData;
 	}
 

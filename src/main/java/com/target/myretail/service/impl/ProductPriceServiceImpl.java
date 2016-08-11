@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 
+
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
@@ -19,6 +20,7 @@ import com.target.myretail.dao.DAO;
 import com.target.myretail.dao.Entity;
 import com.target.myretail.model.ProductPriceData;
 import com.target.myretail.service.ProductPriceService;
+import com.target.myretail.util.MyRetailConstants;
 
 @Service("productPriceService")
 public class ProductPriceServiceImpl implements ProductPriceService {	
@@ -29,14 +31,14 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 	@Override
 	public ProductPriceData getCurentPrice(Long productId) throws InterruptedException, ExecutionException {
 		Entity priceEntity = new Entity();
-		priceEntity.setTableName("productPrice");
-		String[] pKey = {"productid"};
+		priceEntity.setTableName(MyRetailConstants.PRICE_TABLE);
+		String[] pKey = {MyRetailConstants.PRROD_ID_COLUMN};
 		Long[] pKeyVal = {productId};
-		String[] selCol = {"price", "currency_code"};
-		priceEntity.setSelectColumns(selCol);
+		String[] selCol = {MyRetailConstants.PRICE_COLUMN, MyRetailConstants.CURR_CODE_COL};
+		priceEntity.setColumns(selCol);
 		priceEntity.setPrimaryKeys(pKey);
 		priceEntity.setPrimaryKeyValues(pKeyVal);
-		priceEntity.setKeySpaceName("target");
+		priceEntity.setKeySpaceName(MyRetailConstants.PRICE_KEYSPACE);
 		ResultSetFuture rF = dao.get(priceEntity);
 		ResultSet rs = rF.get();
 		Iterator<Row> iter = rs.iterator();

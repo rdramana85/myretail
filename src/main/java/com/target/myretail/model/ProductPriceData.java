@@ -1,11 +1,19 @@
 package com.target.myretail.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
+
 public class ProductPriceData {
 	
 	private Long productId;
 	
+	@NotNull(message="price cannot be empty")	
 	private Float price;
 	
+	@NotNull(message="currency code cannot be empty")
+	@Size(min=3,message="currency code should have atleast 3 characters")
 	private String currencyCode;
 	
 	public Float getPrice() {

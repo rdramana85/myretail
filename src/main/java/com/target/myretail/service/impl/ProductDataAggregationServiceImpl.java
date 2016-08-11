@@ -41,7 +41,7 @@ public class ProductDataAggregationServiceImpl implements ProductDataAggregation
 		} catch (InterruptedException e) {
 			throw new ServiceException(e);
 		} catch (ExecutionException e) {
-			throw new ServiceException(e);
+			throw e;
 		}		
 		return productData;
 	}

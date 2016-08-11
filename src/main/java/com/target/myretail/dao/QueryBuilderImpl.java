@@ -15,7 +15,7 @@ public class QueryBuilderImpl implements QueryBuilder<Entity> {
 		StringBuilder selectQuery = new StringBuilder("select ");
 		String[] primaryKeys = entity.getPrimaryKeys();
 		Object[] primaryKeyValues = entity.getPrimaryKeyValues();
-		for(String selCol : entity.getSelectColumns()){
+		for(String selCol : entity.getColumns()){
 			selectQuery.append(selCol).append(",");
 		}
 		selectQuery.deleteCharAt(selectQuery.length() - 1).append(" ");
@@ -39,8 +39,37 @@ public class QueryBuilderImpl implements QueryBuilder<Entity> {
 
 	@Override
 	public String buildUpdateQuery(Entity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder updateQuery = new StringBuilder("update ");
+		updateQuery.append(entity.getKeySpaceName()+"."+entity.getTableName()).append(" set ");
+		String[] primaryKeys = entity.getPrimaryKeys();
+		Object[] primaryKeyValues = entity.getPrimaryKeyValues();
+		int count = 0;
+		for(String updCol : entity.getColumns()){
+			updateQuery.append(updCol).append("=");
+			Object colVal = entity.getColumnValues()[count];
+			if(colVal instanceof String){
+				updateQuery.append("'"+colVal+"'").append(",");
+			}else{
+				updateQuery.append(colVal).append(",");
+			}
+			count++;
+		}
+		updateQuery.deleteCharAt(updateQuery.length() - 1).append(" ");
+		
+		updateQuery.append(" where ");
+		count = 0;
+		for(Object pVal : primaryKeyValues){
+			if(pVal instanceof String){
+				updateQuery.append(" "+primaryKeys[count]+"='"+pVal+"'");
+			}else{
+				updateQuery.append(" "+primaryKeys[count]+"="+pVal);
+			}
+			if(count < primaryKeyValues.length-1){
+				updateQuery.append(" and ");
+			}
+		}		
+		updateQuery.append("IF EXISTS");
+		return updateQuery.toString();
 	}
 
 	

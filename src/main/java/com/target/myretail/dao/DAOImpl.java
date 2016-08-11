@@ -26,8 +26,11 @@ public class DAOImpl implements DAO<Entity> {
 
 	@Override
 	public ResultSetFuture updateAsync(Entity entity) {
-
-		return null;
+		String query = queryBuilder.buildUpdateQuery(entity);
+		if (session == null) {
+			initializeSession();
+		}		
+		return session.executeAsync(query);
 	}
 
 	@Override
