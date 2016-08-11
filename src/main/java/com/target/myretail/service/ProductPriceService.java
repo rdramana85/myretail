@@ -6,6 +6,6 @@ import com.target.myretail.model.ProductPriceData;
 
 public interface ProductPriceService {
 	
-	public ProductPriceData getCurentPrice(Long productId) throws InterruptedException, ExecutionException;
+	public ProductPriceData getCurentPrice(Long productId) ;
 	
 }
